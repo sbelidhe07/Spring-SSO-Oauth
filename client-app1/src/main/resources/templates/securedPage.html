@@ -1,0 +1,50 @@
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="https://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Spring Security SSO</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      // Return null if not found
+      $.urlParam = function (name) {
+        var results = new RegExp("[?&]" + name + "=([^&#]*)").exec(
+          window.location.search
+        );
+
+        console.log(results);
+        return results !== null ? results[1] || 0 : false;
+      };
+
+      $(function () {
+        $("#uname").html($.urlParam("user"));
+        $('a[href^="http://"]').each(function () {
+          var oldUrl = $(this).attr("href"); // Get current url
+          var newUrl = oldUrl + "?user=" + $.urlParam("user"); // Create new url
+          $(this).attr("href", newUrl); // Set herf value
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <h1 th:inline="text">
+      Hello
+      <div id="uname"></div>
+    </h1>
+    <form th:action="@{/login}" method="post">
+      <input type="submit" value="Sign Out" />
+    </form>
+    <h3>
+      Click <a href="http://localhost:8083/ui2/securedPage">here</a> to access
+      the client application 2 secured page.
+    </h3>
+  </body>
+</html>
